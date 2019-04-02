@@ -4,9 +4,12 @@
 #include "pch.h"
 #include <iostream>
 #include <thread>
+#include <string>
+
 using namespace std;
 void threadFunc();
 void keralafunc();
+void funcbangalore();
 
 void threadFunc()
 {
@@ -19,17 +22,62 @@ void keralafunc() {
 
 }
 
+void funcbangalore() {
+
+	cout << "welcome to bangalore" << endl;
+}
+
+
+class myfunctorclass {
+public:
+
+	void operator()() {
+		cout << "This is my function object from class myfunctorclass" << endl;
+	}
+
+	void publicfunction() {
+
+		cout << "publicfunction of myfunctorclass is called" << endl;
+	}
+
+	
+	    void printsomevalues() {
+
+		cout << "printsomevalues of myfunctorclass is called" << endl;
+
+	}
+};	
+
+
+void myvalues(int val, char str, double dval)
+{
+	cout << val << " " << str << " " << dval << endl;
+
+}
+
 int main() {
+
+
+
+
+	// Basic thread 
 	// pass a function to thread
 	// main thread does not wait for funcTest1 thread termination
-	// main thread finishes execution while funcTest1 still running
+	// main thread finishes execution while funcTest1 still running and error would pop up if you hide line 41
 
 	thread funcTest1(threadFunc);
 
 	
+	// Thread join activity - making all main and child thread synchronized
 	// Join function returns only post all threads are terminated
 	// main thread will wait untill child thread finish execution
 	funcTest1.join();
+
+
+
+
+
+
 
 	
 	// afterjoin() returns thread becoms non joinable 
@@ -43,7 +91,69 @@ int main() {
 
 		keralathread.join();
 	}
+
+
+
+
+
+
+
+
+	// Thread detach activity , making main and child threads not synchronized
+	// detach function detaches a function from parent thread 
+	// It allows parent and child threads to be executed independetly from each other 
+	// after call of detach function detach, the two threads are not synchronized in any ways
+	// post detach You will notice that main thread is not waiting for the termination of its child thread
+	thread bangalorethread(funcbangalore);
+	cout << "detaching the bangalore thread now" << endl;
+	bangalorethread.detach();
+	if (bangalorethread.joinable()) {
+
+		cout << "bangalore thead is joinable" << endl;
+
+	}
+	else
+	{
+		cout << "bangalore thread is not joinable as detached in line 60" << endl;
+	}
+
+
+	// Initializing thread with an object
+	// you can initialize thread not only with function but also with
+	// function object - functor or member function of class
+	// publicfunction is another function of myfunctor class and line 117 calls the public function seperately
+
+
+	myfunctorclass myobject;
+	thread threadclass(myobject);				// Initialing thread with object
+	if (threadclass.joinable())
+		threadclass.join();
+	myfunctorclass myobjecta;
+	thread threadclassa(&myfunctorclass::publicfunction, myobjecta);   // Initializing thead with function . Scope resolution operator :: to access a global variable when there is a local variable with same name
+	if (threadclassa.joinable())
+		threadclassa.join();
 	
+
+	// Passing arguments to thread
+	// We used functions with objects to initialize thread
+	// but we did not pass arguments with function to initialize thread
+	// Lets do that now
+	myfunctorclass myobjectb;
+	thread threadclassb(&myfunctorclass::printsomevalues, myobjectb);
+	if (threadclassb.joinable())
+		threadclassb.join();
+
+
+	// Passing arguments to thread
+	// We used functions with objects to initialize thread
+	// but we did not pass arguments with function to initialize thread
+	// Lets do that now
+	char str = 'h';
+	thread parampassthread(myvalues,2,str,3.2);
+	if (parampassthread.joinable())
+		parampassthread.join();
+
+	// Initialize thread with object and parameters 
 }
 
 
