@@ -178,12 +178,15 @@ int main() {
 	if (test.joinable())
 		test.join();
 
+	// Initialize thread using member function of class
+	// Here we using &myFunctorParam::changesign, myFunctorParam is class and changesign is local function of class
 	int arr2[5] = { -1,3,5,-7,0 };
 	myFunctorParam objParamPass2;
 	thread test2(&myFunctorParam::changesign, &objParamPass2, arr2, 5);
 	if (test2.joinable())
 		test2.join();
-	getchar();
+
+	// Thread ID 
 }
 
 
