@@ -78,9 +78,6 @@ public:
 
 int main() {
 
-
-
-
 	// Basic thread 
 	// pass a function to thread
 	// main thread does not wait for funcTest1 thread termination
@@ -93,11 +90,6 @@ int main() {
 	// Join function returns only post all threads are terminated
 	// main thread will wait untill child thread finish execution
 	funcTest1.join();
-
-
-
-
-
 
 
 	
