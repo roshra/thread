@@ -48,12 +48,22 @@ public:
 	}
 };	
 
-
 void myvalues(int val, char str, double dval)
 {
 	cout << val << " " << str << " " << dval << endl;
 
 }
+
+class myFunctorParam {
+
+public:
+	void operator() (int * arr, int length) {
+		cout << "An array of length" << length << "is passed to thread" << endl;
+		for (int i = 0; i != length; i++)
+			cout << arr[i] << " " << endl;
+		cout << endl;
+	}
+};
 
 int main() {
 
@@ -91,11 +101,6 @@ int main() {
 
 		keralathread.join();
 	}
-
-
-
-
-
 
 
 
@@ -154,6 +159,14 @@ int main() {
 		parampassthread.join();
 
 	// Initialize thread with object and parameters 
+	// These params will be passed to the thread
+	//these parameters will be passed to thread
+	int arr[5] = { 1, 3, 5, 7, 9 };
+	myFunctorParam objParamPass;
+	thread test(objParamPass, arr,5);
+	if (test.joinable())
+		test.join();
+	getchar();
 }
 
 
