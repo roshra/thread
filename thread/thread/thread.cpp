@@ -63,6 +63,17 @@ public:
 			cout << arr[i] << " " << endl;
 		cout << endl;
 	}
+
+	void changesign (int * arr1, int length2) {
+		cout << length2 << endl;
+		cout << arr1[0] << endl;
+		cout << arr1[1] << endl;
+		cout << arr1[2] << endl;
+		cout << arr1[3] << endl;
+		cout << arr1[4] << endl;
+		
+
+	}
 };
 
 int main() {
@@ -166,6 +177,12 @@ int main() {
 	thread test(objParamPass, arr,5);
 	if (test.joinable())
 		test.join();
+
+	int arr2[5] = { -1,3,5,-7,0 };
+	myFunctorParam objParamPass2;
+	thread test2(&myFunctorParam::changesign, &objParamPass2, arr2, 5);
+	if (test2.joinable())
+		test2.join();
 	getchar();
 }
 
