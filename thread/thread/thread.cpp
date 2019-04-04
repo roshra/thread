@@ -5,8 +5,14 @@
 #include <iostream>
 #include <thread>
 #include <string>
+#include <vector>
+#include<conio.h>
+#include<Windows.h>
+#include<mutex>
 
+std::mutex mtx;
 using namespace std;
+
 void threadFunc();
 void keralafunc();
 void funcbangalore();
@@ -75,6 +81,64 @@ public:
 
 	}
 };
+
+vector<int> vec;
+void push()
+{
+	for (int i = 0; i != 10; ++i)
+	{
+		cout << "Push " << i << endl;
+		Sleep(500);
+		vec.push_back(i);				// Adds a new element at the end of the vector, after its current last element
+	}
+}
+void pop()
+{
+	for (int i = 0; i != 10; ++i)
+	{
+		if (vec.size() > 0)
+		{
+			int val = vec.back();        // Returns a reference to the last element in the vector
+			vec.pop_back();				 // Removes the last element in the vector, effectively reducing the container size by one
+			cout << "Pop " << val << endl;
+		}
+		Sleep(500);
+	}
+}
+
+
+
+
+
+void push_order() {
+
+	mtx.lock();
+		for (int i = 0; i != 10; i++) {
+			cout << "Push " << i << endl;
+			Sleep(50);
+			vec.push_back(i);
+
+		}
+	mtx.unlock();
+
+}
+
+void pop_order() {
+
+	mtx.lock();
+	for (int i = 0; i != 10; i++) {
+		if (vec.size() > 0)
+		{
+			int val = vec.back();
+			vec.pop_back();
+			cout << "pop " << val << endl;
+			}
+		Sleep(50);
+		}
+	mtx.unlock();
+}
+
+
 
 int main() {
 
@@ -179,6 +243,60 @@ int main() {
 		test2.join();
 
 	// Thread ID 
+	// Create three threads 
+	myfunctorclass showmessage;
+	thread t1(showmessage);
+	thread t2(showmessage);
+	thread t3(showmessage);
+
+	// Get ID of all threads
+	thread::id id1 = t1.get_id();
+	thread::id id2 = t2.get_id();
+	thread::id id3 = t3.get_id();
+
+	// Join all the threads
+	if (t1.joinable()) {
+		t1.join();
+		cout << endl;
+		cout << "Thread with id " << id1 << "is terminated" << endl;
+
+	}
+
+	if (t2.joinable()) {
+		t2.join();
+		cout << "Thread with id " << id2 << "is terminated" << endl;
+
+	}
+	if (t3.joinable()) {
+			t3.join();
+			cout << "Thread with id " << id3 << "is terminated" << endl;
+	}
+	
+
+	thread push(push);
+	thread pop(pop);
+	if (push.joinable())
+		push.join();
+	if (pop.joinable())
+		pop.join();
+
+	// Mutex Lock
+	// Synchronization primitive - used to protect shared data from simultaneous access
+	// A mutex can be locked and unlocked
+	// Once mutex is locked , current thread owns mutex untill its not unlocked
+	// No other thread can - execute any instructions from block of code surrounded by mutex - untill thread that owns mutex unlocks it
+	// If you like to use mutex , you have to include mutex header into the program
+	thread push_orderthread(push_order);
+	thread pop_orderthread(pop_order);
+
+	if (push_orderthread.joinable())
+		push_orderthread.join();
+
+	if (pop_orderthread.joinable())
+		pop_orderthread.joinable();
+
+	getchar();
+	
 }
 
 
